@@ -93,5 +93,5 @@ ccs_calc <- function(orthopnea, edema, jugular_venous) {
   # Calculate CCS
   ccs <- orthopnea_score + edema_score + jugular_score
   
-  return(ccs_calc)
+  return(ccs)
 }
