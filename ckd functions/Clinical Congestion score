@@ -1,0 +1,97 @@
+#  CLINICAL CONGESTION SCORE (CCS) FUNCTION
+# ============================================================================
+calculate_clinical_congestion_score <- function(orthopnea, edema, jugular_venous) {
+  
+  # Define scoring mappings for each clinical sign
+  orthopnea_map <- c(
+    "Absent" = 0,
+    "Sometimes" = 1,
+    "Always" = 2,
+    "Always and PND" = 3
+  )
+  
+  edema_map <- c(
+    "Absent" = 0,
+    "Ankle" = 1,
+    "Up to knee" = 2,
+    "Above knee" = 3
+  )
+  
+  jugular_map <- c(
+    "Absent" = 0,
+    "Does not reach sternocleidomastoid" = 1,
+    "Exceeds sternocleidomastoid" = 2,
+    "Reaches inferior maxillary base" = 3
+  )
+  
+  # Map values to scores
+  orthopnea_score <- orthopnea_map[orthopnea]
+  edema_score <- edema_map[edema]
+  jugular_score <- jugular_map[jugular_venous]
+  
+  # Calculate total CCS
+  ccs <- orthopnea_score + edema_score + jugular_score
+  
+  return(ccs)
+}
+
+# CCS SCORING DETAILS:
+# ============================================================================
+# ORTHOPNEA (Shortness of breath when lying flat):
+#   Score 0: Absent
+#   Score 1: Sometimes (occasional episodes)
+#   Score 2: Always (persistent symptom)
+#   Score 3: Always + PND (Paroxysmal Nocturnal Dyspnea)
+#
+# EDEMA (Fluid accumulation in legs/feet):
+#   Score 0: Absent (no swelling)
+#   Score 1: Ankle (confined to ankle area)
+#   Score 2: Up to knee (extends to knee)
+#   Score 3: Above knee (extends above knee)
+#
+# JUGULAR VENOUS DISTENSION (JVD - neck vein swelling):
+#   Score 0: Absent (not visible)
+#   Score 1: Does not reach sternocleidomastoid (lower in neck)
+#   Score 2: Exceeds sternocleidomastoid (higher than expected)
+#   Score 3: Reaches inferior maxillary base (extends to jaw)
+#
+# TOTAL CCS RANGE: 0-9
+#   0-3: Mild congestion
+#   4-6: Moderate congestion
+#   7-9: Severe congestion
+
+#Function
+
+ccs_calc <- function(orthopnea, edema, jugular_venous) {
+  # Define scoring mappings
+  orthopnea_map <- c(
+    "Absent" = 0,
+    "Sometimes" = 1,
+    "Always" = 2,
+    "Always and PND" = 3
+  )
+  
+  edema_map <- c(
+    "Absent" = 0,
+    "Ankle" = 1,
+    "Up to knee" = 2,
+    "Above knee" = 3
+  )
+  
+  jugular_map <- c(
+    "Absent" = 0,
+    "Does not reach sternocleidomastoid" = 1,
+    "Exceeds sternocleidomastoid" = 2,
+    "Reaches inferior maxillary base" = 3
+  )
+  
+  # Map values to scores using named vectors
+  orthopnea_score <- orthopnea_map[orthopnea]
+  edema_score <- edema_map[edema]
+  jugular_score <- jugular_map[jugular_venous]
+  
+  # Calculate CCS
+  ccs <- orthopnea_score + edema_score + jugular_score
+  
+  return(ccs_calc)
+}
