@@ -1,0 +1,118 @@
+#' Chronic Kidney Disease (CKD) Classification Functions
+#'
+#' This script contains functions to diagnose and classify Chronic Kidney Disease
+#' based on GFR (Glomerular Filtration Rate) and UACR (Urine Albumin-to-Creatinine Ratio)
+
+library(dplyr)
+
+#' Categorize Albuminuria Level
+#'
+#' @param uacr Numeric vector of urine albumin-to-creatinine ratio (mg/g)
+#'
+#' @return Character vector with albuminuria categories:
+#'   - "A1" (Normal to mildly increased): UACR < 30 mg/g
+#'   - "A2" (Moderately increased): 30 ≤ UACR < 300 mg/g
+#'   - "A3" (Severely increased): UACR ≥ 300 mg/g
+#'
+#' @examples
+#' ckd_alb(uacr = c(15, 50, 150, 350))
+#'
+#' @export
+ckd_alb <- function(uacr) {
+  if (!is.numeric(uacr)) {
+    stop("uacr must be numeric")
+  }
+  
+  albuminuria_category <- dplyr::case_when(
+    uacr < 30 ~ "A1",
+    uacr >= 30 & uacr < 300 ~ "A2",
+    uacr >= 300 ~ "A3",
+    is.na(uacr) ~ NA_character_,
+    TRUE ~ NA_character_
+  )
+  
+  return(albuminuria_category)
+}
+
+
+#' Classify CKD Stage
+#'
+#' @param gfr Numeric vector of glomerular filtration rate (mL/min/1.73m²)
+#' @param uacr Numeric vector of urine albumin-to-creatinine ratio (mg/g).
+#'   Optional; if not provided, classification is based on GFR alone.
+#'
+#' @return Character vector with CKD stages:
+#'   - "1": GFR ≥ 90 with albuminuria (A2 or A3)
+#'   - "2": GFR 60-89 with albuminuria (A2 or A3)
+#'   - "3a": GFR 45-59 (regardless of albuminuria)
+#'   - "3b": GFR 30-44 (regardless of albuminuria)
+#'   - "4": GFR 15-29 (regardless of albuminuria)
+#'   - "5": GFR < 15 (regardless of albuminuria)
+#'   - NA: If GFR is missing
+#'
+#' @details
+#' CKD classification is based on KDIGO (Kidney Disease: Improving Global Outcomes)
+#' guidelines. Stages 1-2 require albuminuria (A2 or A3) for diagnosis, while
+#' stages 3-5 are determined primarily by GFR.
+#'
+#' @examples
+#' ckd_grade(gfr = c(95, 75, 55, 35, 25, 12))
+#' ckd_grade(gfr = c(95, 75, 55), uacr = c(50, 40, 10))
+#'
+#' @export
+ckd_grade <- function(gfr, uacr = NULL) {
+  if (!is.numeric(gfr)) {
+    stop("gfr must be numeric")
+  }
+  
+  # If UACR is not provided, create it as missing
+  if (is.null(uacr)) {
+    uacr <- rep(NA_real_, length(gfr))
+  }
+  
+  if (!is.numeric(uacr)) {
+    stop("uacr must be numeric")
+  }
+  
+  if (length(gfr) != length(uacr)) {
+    stop("gfr and uacr must have the same length")
+  }
+  
+  # Determine albuminuria category
+  albuminuria_cat <- ckd_alb(uacr)
+  
+  # Classify CKD stage based on GFR and albuminuria
+  ckd_stage <- dplyr::case_when(
+    # Stage 1: GFR ≥ 90 with albuminuria
+    gfr >= 90 & albuminuria_cat %in% c("A2", "A3") ~ "1",
+    
+    # Stage 2: GFR 60-89 with albuminuria
+    gfr >= 60 & gfr < 90 & albuminuria_cat %in% c("A2", "A3") ~ "2",
+    
+    # Stage 3a: GFR 45-59
+    gfr >= 45 & gfr < 60 ~ "3a",
+    
+    # Stage 3b: GFR 30-44
+    gfr >= 30 & gfr < 45 ~ "3b",
+    
+    # Stage 4: GFR 15-29
+    gfr >= 15 & gfr < 30 ~ "4",
+    
+    # Stage 5: GFR < 15
+    gfr < 15 ~ "5",
+    
+    # Missing or unclassified
+    is.na(gfr) ~ NA_character_,
+    TRUE ~ NA_character_
+  )
+  
+  return(ckd_stage)
+}
+
+
+#' Determine CKD Status (Present or Not)
+#'
+#' @param gfr Numeric vector of glomerular filtration rate (mL/min/1.73m²)
+#' @param uacr Numeric vector of urine albumin-to-creatinine ratio (mg/g)
+#'
+#' @return Numeric vector (0
