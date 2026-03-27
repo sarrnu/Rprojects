@@ -1,0 +1,19 @@
+#' Determine CKD Status and Grade
+#'
+#' This script contains two functions to diagnose Chronic Kidney Disease (CKD)
+#' based on GFR and albuminuria levels.
+
+#' Function 1: Determine if patient has CKD
+#'
+#' @param gfr Numeric vector of GFR values (mL/min/1.73m²)
+#' @param uacr Numeric vector of albumin-to-creatinine ratio (mg/g)
+#'
+#' @return Numeric vector (0 = No CKD, 1 = CKD present)
+#' 
+#' @examples
+#' has_ckd(gfr_v1 = c(70, 45, 15), albcreav1_mgg = c(15, 50, 200))
+#'
+has_ckd <- function(gfr, uacr) {
+  ckd_status <- ifelse(gfr < 60 | uacr >= 30, 1, 0)
+  return(ckd_status)
+}
