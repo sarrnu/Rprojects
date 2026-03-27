@@ -1,0 +1,21 @@
+# Function to classify anemia based on sex and hemoglobin levels
+# Returns 1 for anemia and 0 for no anemia
+
+classify_anemia <- function(sex, hemoglobin) {
+  # Check for valid input
+  if (!sex %in% c("Mujer", "Varon")) {
+    return(NA)
+  }
+  if (!is.numeric(hemoglobin)) {
+    return(NA)
+  }
+
+  # Logic for classification
+  if (sex == "Mujer" && hemoglobin < 12) {
+    return(1)  # Anemia
+  } else if (sex == "Varon" && hemoglobin < 13) {
+    return(1)  # Anemia
+  }
+
+  return(0)  # No anemia
+}
