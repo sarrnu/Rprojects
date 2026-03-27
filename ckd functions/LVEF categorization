@@ -1,0 +1,11 @@
+# LVEF category
+
+categorize_lvef <- function(fevipre) {
+  factor(case_when(
+    fevipre <= 40 ~ "HFrEF", 
+    fevipre > 40 & fevipre < 50 ~ "HFmrEF",
+    fevipre >= 50 ~ "HFpEF"
+  ),
+  levels = c("HFrEF", "HFmrEF", "HFpEF")
+  )
+}
