@@ -1,0 +1,12 @@
+# BMI as numeric (kg/m2) #
+
+categorize_bmi <- function(bmi) {
+  factor(case_when(
+    bmi < 18.5 ~ "infrapeso", 
+    bmi >= 18.5 & bmi < 25 ~ "normopeso",
+    bmi >= 25 & bmi < 30 ~ "sobrepeso", 
+    bmi >= 30 ~ "obesidad"
+  ),
+  levels = c("infrapeso", "normopeso", "sobrepeso", "obesidad")
+  )
+}
